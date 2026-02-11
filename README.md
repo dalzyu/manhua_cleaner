@@ -87,7 +87,7 @@ with processor:
 | LongCat-Image-Edit | ~18GB | Slow | Subpar |
 | LongCat-Image-Edit-Turbo | ~18GB | Fast | OK |
 
-## Features and Parmeters
+## Explanation of Features and Parmeters
 
 ### Character Whitelist
 - **Purpose**: Preserve specific text (SFX, symbols) while removing others.
@@ -176,3 +176,4 @@ my_model = "my_package:MyImageModel"
 ## License
 
 GPLv3 - See LICENSE file for details.
+
