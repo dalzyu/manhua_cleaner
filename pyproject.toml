@@ -1,0 +1,107 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "manhua-cleaner"
+version = "2.1.0"
+description = "AI-powered text removal from manga/manhua images"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Manhua Cleaner Team"}
+]
+keywords = ["manga", "manhua", "ocr", "ai", "inpainting", "text-removal"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# Core dependencies - lightweight
+# Heavy deps (torch, diffusers, paddleocr, PyQt6) are optional
+dependencies = [
+    "pillow>=10.0.0",
+    "numpy>=1.26.0",
+    "shapely>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+# OCR engines
+ocr = ["paddleocr>=2.7.0"]
+ocr-all = ["paddleocr>=2.7.0", "easyocr>=1.7.0"]
+
+# AI models - heavy dependencies
+models = ["torch>=2.0.0,<3.0.0", "diffusers>=0.32.0"]
+models-gpu = ["torch>=2.0.0,<3.0.0", "diffusers>=0.32.0", "accelerate>=0.25.0"]
+
+# Quantized models
+quantization = ["sdnq>=0.1.0", "dfloat11>=0.1.0"]
+
+# GUI
+gui = ["PyQt6>=6.5.0", "qasync>=0.27.0"]
+
+# Development
+dev = ["pytest>=7.4.0", "pytest-cov>=4.1.0", "black>=23.0.0", "mypy>=1.5.0", "hypothesis>=6.90.0"]
+
+# All-in-one (previous behavior)
+all = [
+    "manhua-cleaner[ocr-all,models,gui]"
+]
+
+# Minimal install with CPU models only
+cpu = [
+    "manhua-cleaner[ocr]"
+]
+
+[project.scripts]
+manhua-cleaner = "manhua_cleaner.interfaces.cli.main:main"
+manhua-cleaner-gui = "manhua_cleaner.interfaces.gui.main:main"
+
+[project.entry-points."manhua_cleaner.ocr"]
+paddleocr = "manhua_cleaner.adapters.ocr.paddle_adapter:PaddleOCRAdapter"
+
+try:
+    easyocr = "manhua_cleaner.adapters.ocr.easyocr_adapter:EasyOCRAdapter"
+except:
+    pass
+
+[project.entry-points."manhua_cleaner.models"]
+flux = "manhua_cleaner.adapters.models.flux_adapter:FluxAdapter"
+longcat = "manhua_cleaner.adapters.models.longcat_adapter:LongCatAdapter"
+
+[project.urls]
+Homepage = "https://github.com/username/manhua-cleaner"
+Repository = "https://github.com/username/manhua-cleaner"
+Issues = "https://github.com/username/manhua-cleaner/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["manhua_cleaner*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311', 'py312']
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["manhua_cleaner/tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
