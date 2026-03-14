@@ -596,7 +596,7 @@ class BatchProcessor:
             
             # Build consolidated pre-AI preview showing all stages
             if preview_callback:
-                pre_ai_preview = self._build_pre_ai_preview_v2(
+                pre_ai_preview = self._build_pre_ai_preview(
                     preview_base,
                     raw_boxes,
                     smart_boxes,
